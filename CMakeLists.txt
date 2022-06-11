@@ -5,13 +5,7 @@ project(RemoteChat VERSION 0.1.0)
 # enable_testing()
 
 add_subdirectory(net)
-
-find_package(asio CONFIG REQUIRED)
-
-add_executable(RemoteChat "main.cpp")
-
-target_link_libraries(RemoteChat PRIVATE net)
-target_link_libraries(RemoteChat PRIVATE asio asio::asio)
+add_subdirectory(client)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
