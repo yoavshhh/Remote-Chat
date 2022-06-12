@@ -276,6 +276,7 @@ namespace olc
 
 			uint64_t scramble(uint64_t nInput) {
 				uint64_t out = nInput ^ 0xDFE;
+                return out;
 			}
 
 		protected:
