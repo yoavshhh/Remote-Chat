@@ -1,2 +1,2 @@
 # Remote-Chat
-Here is my remote cpp Firebase based remote chat for you!
+Here is my remote cpp, Boost ASIO based remote chat for you!
