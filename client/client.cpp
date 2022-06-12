@@ -43,42 +43,38 @@ public:
 // 	return str.c_str();
 // }
 
+CustomClient c;
 bool bQuit = false;
 
-int main() {
-	CustomClient c;
-	std::string server_ip = "54.91.248.95";// "89.139.121.237";
-	std::cout << "Trying to Connect to IP: " << server_ip << "\n";
-	c.Connect(server_ip, 6767);
+void input_main() {
 
-	std::thread inputThr([&]() {
+    while (!bQuit) {
+        int func; std::cin >> func;
+        switch (func)
+        {
+        case 1:
+        {
+            bQuit = true;
+        }
+        break;
+        case 2:
+        {
+            c.PingServer();
+        }
+        break;
+        case 3:
+        {
+            c.MessageAll();
+        }
+        break;
+        default:
+        break;
+        }
+    }
+}
 
-		while (!bQuit) {
-
-			int func; std::cin >> func;
-			switch (func)
-			{
-			case 1:
-			{
-				bQuit = true;
-			}
-			break;
-			case 2:
-			{
-				c.PingServer();
-			}
-			break;
-			case 3:
-			{
-				c.MessageAll();
-			}
-			break;
-			default:
-			break;
-			}
-		}
-	});
-	while (!bQuit) {
+void comms_main() {
+    	while (!bQuit) {
 
 		if (c.IsConnected()) {
 
@@ -122,14 +118,31 @@ int main() {
 			bQuit = true;
 		}
 	}
+}
+
+int main() {
+	std::string server_ip = "192.168.56.125";// "89.139.121.237";
+	std::cout << "Trying to Connect to IP: " << server_ip << "\n";
+	c.Connect(server_ip, 6767);
+
+
+	std::thread inputThr(input_main);
+
+    comms_main();
+
 	if (inputThr.joinable()) inputThr.join();
+    
+    c.Disconnect();
 	system("pause");
 	return 0;
 }
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     AllocConsole();
-    freopen("CONOUT$", "w+", stdout);
+    FILE* fp = nullptr;
+    freopen_s(&fp, "CONIN$", "r+", stdin);
+    freopen_s(&fp, "CONOUT$", "w+", stdout);
+    freopen_s(&fp, "CONOUT$", "w+", stderr);
     main();
 }
 
