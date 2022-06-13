@@ -121,7 +121,7 @@ void comms_main() {
 }
 
 int main() {
-	std::string server_ip = "192.168.56.125";// "89.139.121.237";
+	std::string server_ip = "54.91.248.95";// "89.139.121.237";
 	std::cout << "Trying to Connect to IP: " << server_ip << "\n";
 	c.Connect(server_ip, 6767);
 
