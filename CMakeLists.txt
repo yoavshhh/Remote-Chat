@@ -5,7 +5,7 @@ project(RemoteChat VERSION 0.1.0)
 # enable_testing()
 
 add_subdirectory(net)
-add_subdirectory(client)
+add_subdirectory(server)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})

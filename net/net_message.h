@@ -72,7 +72,7 @@ namespace olc
 				msg.body.resize(msg.body.size() + data.size());
 
 				// Physically copying the data into the newly allocated vector space (in bytes)
-				std::memcpy(msg.body.data() + i, &data, data.size());
+				std::memcpy(msg.body.data() + i, &data[0], data.size());
 
 				// Recalculate the message size
 				msg.header.size = (uint32_t) msg.size();
@@ -111,7 +111,7 @@ namespace olc
 				size_t i = msg.body.size() - data.size();
 
 				// Phisically copy the data from the vector into the user variable
-				std::memcpy(&data, msg.body.data() + i, data.size());
+			    std::memcpy(&data[0], msg.body.data() + i, data.size());
 
 				// Shrink the vector to remove the read bytes and reset end position
 				msg.body.resize(i);

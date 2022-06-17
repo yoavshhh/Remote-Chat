@@ -11,7 +11,16 @@ enum class CustomMsgTypes : uint32_t {
     OtherMessage,
 };
 
-
+int mystrlen(char *p)
+{
+    int c=0;
+    while(*p!='\0')
+    {
+        c++;
+        *p++;
+    }
+    return(c);
+}
 
 class CustomServer : public olc::net::server_interface<CustomMsgTypes>
 {
@@ -39,20 +48,24 @@ protected:
 	// Called when a message arrives
 	virtual void OnMessage(std::shared_ptr<olc::net::connection<CustomMsgTypes>> client, olc::net::message<CustomMsgTypes>& msg)
 	{
-
+        std::cout << "Recieved: " << client->GetID() << ": " << (int)msg.header.id << std::endl;
 		switch (msg.header.id)
 		{
 		case CustomMsgTypes::ClientMessage:
 		{
+            uint32_t bodySize;
+			std::string msgBody;
 
-			const char* msgBody;
+            msg >> bodySize;
+            msgBody.resize(bodySize);
             msg >> msgBody;
-			std::cout << "" << client->GetID() << ": " << msgBody << "\n";
+
+			std::cout << client->GetID() << ": " << msgBody << std::endl;
 
 			// Construct a new message and send it to all clients
 			olc::net::message<CustomMsgTypes> msg;
 			msg.header.id = CustomMsgTypes::OtherMessage;
-			msg << msgBody << client->GetID();
+			msg << msgBody << bodySize << client->GetID();
 			MessageAllClients(msg, client);
 
 		}
@@ -67,10 +80,10 @@ int main()
 	server.Start();
 
 	while (1) {
-
-		server.Update(-1, true);
+        std::cout << "starting to update server.\n";
+		server.Update(200, true);
 	}
-	
+	std::cout << "Bye bye!\n";
 	system("pause");
 	return 0;
 }
