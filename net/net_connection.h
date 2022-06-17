@@ -143,7 +143,7 @@ namespace olc
 
 							// Reading form the client went wrong, most likely a disconnect
 							// has occurred. Close the socket and let the system tidy it up later.
-							std::cout << "[" << id << "] Read Header Fail.\n";
+							std::cout << "[" << id << "] Read Header Fail.\n" << ec.message() << '\n';
 							m_socket.close();
 						}
 					});

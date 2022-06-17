@@ -62,6 +62,25 @@ namespace olc
 				return msg;
 			}
 
+            // handle specific string data type
+			friend message<T>& operator << (message<T>& msg, std::string &data) {
+
+				// Cache current size of vector, as this will be the point we insert the data
+				size_t i = msg.body.size();
+
+				// Resize the vector by the size of the data being pushed 
+				msg.body.resize(msg.body.size() + data.size());
+
+				// Physically copying the data into the newly allocated vector space (in bytes)
+				std::memcpy(msg.body.data() + i, &data, data.size());
+
+				// Recalculate the message size
+				msg.header.size = (uint32_t) msg.size();
+
+				// Return the target message so it can be chained as with std::cout
+				return msg;
+			}
+
 			// Pulls any POD-like data from a message buffer
 			template <typename DataType>
 			friend message<T>& operator >> (message<T>& msg, DataType& data) {
@@ -84,6 +103,25 @@ namespace olc
 				// Return the target message so it can be chained as with std::cout
 				return msg;
 			}
+
+            // handle specific string data type
+			friend message<T>& operator >> (message<T>& msg, std::string &data) {
+
+				// Cache the location towards the end of the vector where the pulled data starts
+				size_t i = msg.body.size() - data.size();
+
+				// Phisically copy the data from the vector into the user variable
+				std::memcpy(&data, msg.body.data() + i, data.size());
+
+				// Shrink the vector to remove the read bytes and reset end position
+				msg.body.resize(i);
+
+				// Recalculate the message size
+				msg.header.size = (uint32_t) msg.size();
+
+				// Return the target message so it can be chained as with std::cout
+				return msg;
+			} 
 		};
 
 		// Forward declare the connection
