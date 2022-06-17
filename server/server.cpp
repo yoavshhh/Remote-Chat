@@ -2,13 +2,13 @@
 
 #include <olc_net.h>
 
-enum class CustomMsgTypes : uint32_t
-{
+enum class CustomMsgTypes : uint32_t {
+	
 	ServerAccept,
 	ServerDeny,
-	ServerPing,
-	MessageAll,
-	ServerMessage,
+    ClientMessage,
+    ServerMessage,
+    OtherMessage,
 };
 
 
@@ -42,24 +42,17 @@ protected:
 
 		switch (msg.header.id)
 		{
-		case CustomMsgTypes::ServerPing:
-		{
-			std::cout << "[" << client->GetID() << "]: Server Ping\n";
-
-			// Simply bounce message back to client
-			client->Send(msg);
-		}
-		break;
-		case CustomMsgTypes::MessageAll:
+		case CustomMsgTypes::ClientMessage:
 		{
 
-			std::string msgBody = "Default Ping";
-			std::cout << "[" << client->GetID() << "]: " << msgBody << "\n";
+			const char* msgBody;
+            msg >> msgBody;
+			std::cout << "" << client->GetID() << ": " << msgBody << "\n";
 
 			// Construct a new message and send it to all clients
 			olc::net::message<CustomMsgTypes> msg;
-			msg.header.id = CustomMsgTypes::ServerMessage;
-			msg << client->GetID();
+			msg.header.id = CustomMsgTypes::OtherMessage;
+			msg << msgBody << client->GetID();
 			MessageAllClients(msg, client);
 
 		}
