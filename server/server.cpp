@@ -11,17 +11,6 @@ enum class CustomMsgTypes : uint32_t {
     OtherMessage,
 };
 
-int mystrlen(char *p)
-{
-    int c=0;
-    while(*p!='\0')
-    {
-        c++;
-        *p++;
-    }
-    return(c);
-}
-
 class CustomServer : public olc::net::server_interface<CustomMsgTypes>
 {
 public:
